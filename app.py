@@ -83,7 +83,7 @@ def main():
         output.append(fo)
 
     parsed_output = json.dumps(output)
-    u.write_file(parsed_output, str(Path.cwd()) + '/report/final_output.json')
+    u.write_file(parsed_output, str(Path.cwd()) + '/report/src/final_output.json')
     print(parsed_output)
 
 if __name__ == '__main__':
