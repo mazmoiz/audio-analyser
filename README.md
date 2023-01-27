@@ -7,16 +7,23 @@
 ## Requirements
 - **Python 3.6+**
 ### Python Packages
-- **tensorflow**
 - **librosa==0.6.3**
 - **numpy**
 - **pandas**
+- **requests**
+- **time**
+- **json**
+- **pickle**
+- **soundfile**
+- **pydub**
+- **emotion-recognition**
 - **soundfile==0.9.0**
 - **wave**
 - **scikit-learn==0.24.2**
 - **tqdm==4.28.1**
 - **matplotlib==2.2.3**
 - **pyaudio==0.2.11**
+- **tensorflow==2.5.2**
 - **[ffmpeg](https://ffmpeg.org/) (optional)**: used if you want to add more sample audio by converting to 16000Hz sample rate and mono channel which is provided in ``convert_wavs.py``
 
 Install these libraries by the following command:
