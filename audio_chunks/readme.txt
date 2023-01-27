@@ -1,0 +1,1 @@
+Audio chunks would be created in this working folder which would be used to extract emotions.
