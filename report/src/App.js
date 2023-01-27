@@ -79,7 +79,7 @@ export const pieChartOptions = {
     },
     title: {
       display: true,
-      text: "Speaker Talk Time Destribution"
+      text: "Speaker Talk Time Distribution"
     }
   }
 };
