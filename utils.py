@@ -2,9 +2,8 @@ import soundfile
 import librosa
 import numpy as np
 import pickle
-import os
+import os, shutil
 from convert_wavs import convert_audio
-
 
 AVAILABLE_EMOTIONS = {
     "neutral",
@@ -125,4 +124,22 @@ def get_audio_config(features_list):
             raise TypeError(f"Feature passed: {feature} is not recognized.")
         audio_config[feature] = True
     return audio_config
-    
+
+def write_file(data, fileName):
+    with open(fileName, 'w') as f:
+        f.write(str(data))
+
+def get_estimators_name(estimators):
+    result = [ '"{}"'.format(estimator.__class__.__name__) for estimator, _, _ in estimators ]
+    return ','.join(result), {estimator_name.strip('"'): estimator for estimator_name, (estimator, _, _) in zip(result, estimators)}
+
+def clean_output_folder(folder):
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print('Failed to delete %s. Reason: %s' % (file_path, e))
