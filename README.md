@@ -16,7 +16,6 @@
 - **pickle**
 - **soundfile**
 - **pydub**
-- **emotion-recognition**
 - **soundfile==0.9.0**
 - **wave**
 - **scikit-learn==0.24.2**
