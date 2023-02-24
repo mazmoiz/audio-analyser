@@ -4,6 +4,7 @@ import numpy as np
 import pickle
 import os, shutil
 from convert_wavs import convert_audio
+import time
 
 AVAILABLE_EMOTIONS = {
     "neutral",
@@ -143,3 +144,7 @@ def clean_output_folder(folder):
                 shutil.rmtree(file_path)
         except Exception as e:
             print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+def get_localtime():
+    formattedTime = time.strftime("%m-%d-%Y(%I %M %S %p)")
+    return formattedTime

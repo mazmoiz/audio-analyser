@@ -5,14 +5,15 @@ import audioUtils as au
 import utils as u
 import json
 from pathlib import Path
+import excel as e
 
 # IMPORTANT - Get the API key from https://www.assemblyai.com/ 
 
 def main():
-
+    
     # Create header with authorization along with content-type
     header = {
-        'authorization': '<YOUR ASSEMBLY AI API KEY>',
+        'authorization': '29d17394c6d14d7187a71492a2c3a625',
         'content-type': 'application/json',
         'Accept': 'application/json'
     }
@@ -85,6 +86,8 @@ def main():
     parsed_output = json.dumps(output)
     u.write_file(parsed_output, str(Path.cwd()) + '/report/src/final_output.json')
     print(parsed_output)
+
+    e.create_excel(str(Path.cwd()) + '/report/src/final_output.json', os.path.basename(audio_file_path) + '__' + u.get_localtime())
 
 if __name__ == '__main__':
     main()

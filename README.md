@@ -5,24 +5,22 @@
 - This is useful for many industry fields such as making product recommendations, affective computing, etc.
 - Check this [tutorial](https://www.thepythoncode.com/article/building-a-speech-emotion-recognizer-using-sklearn) for more information.
 ## Requirements
-- **Python 3.6+**
+- **Python 3.10+**
 ### Python Packages
-- **librosa==0.6.3**
-- **numpy**
-- **pandas**
-- **requests**
-- **time**
-- **json**
-- **pickle**
-- **soundfile**
-- **pydub**
-- **soundfile==0.9.0**
-- **wave**
-- **scikit-learn==0.24.2**
-- **tqdm==4.28.1**
-- **matplotlib==2.2.3**
-- **pyaudio==0.2.11**
-- **tensorflow==2.5.2**
+- **librosa==0.9.2**
+- **numpy==1.21.5**
+- **pandas==1.4.4**
+- **requests==2.28.1**
+- **json5**
+- **soundfile==0.11.0**
+- **pydub==0.25.1**
+- **scikit-learn==1.0.2**
+- **tqdm==4.64.1**
+- **matplotlib==3.5.2**
+- **pyaudio==0.2.13**
+- **tensorflow==2.11.0**
+- **openpyxl==2.6.2**
+
 - **[ffmpeg](https://ffmpeg.org/) (optional)**: used if you want to add more sample audio by converting to 16000Hz sample rate and mono channel which is provided in ``convert_wavs.py``
 
 Install these libraries by the following command:
