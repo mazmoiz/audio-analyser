@@ -16,6 +16,7 @@ import { Line, Doughnut, Bar } from "react-chartjs-2";
 import "chartjs-plugin-datalabels";
 import audioData from "./final_output.json";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+//import annotationPlugin from "chartjs-plugin-annotation";
 
 ChartJS.register(
   ArcElement,
@@ -27,49 +28,11 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  //annotationPlugin
 );
 
-export const lineChartOptions = {
-  responsive: true,
-  scales: {
-    x1: {
-      position: "top",
-      ticks: {
-        autoSkip: false,
-        maxRotation: 90,
-        minRotation: 90,
-        callback: function (value, index, values) {
-          return this.getLabelForValue(value).split(";")[1];
-        }
-      }
-    },
-    x2: {
-      position: "bottom",
-      ticks: {
-        callback: function (value, index, values) {
-          return this.getLabelForValue(value).split(";")[0];
-        }
-      }
-    },
-    y: {
-      ticks: {
-        callback: function (value, index, ticks) {
-          return value + " dbfs";
-        }
-      }
-    }
-  },
-  plugins: {
-    legend: {
-      position: "top"
-    },
-    title: {
-      display: true,
-      text: "Speaker Diarisation"
-    }
-  }
-};
+
 
 export const pieChartOptions = {
   responsive: true,
@@ -87,6 +50,56 @@ export const pieChartOptions = {
 export default function App() {
   const [speakers, setSpeakers] = useState([]);
 
+  let lineSegments = [];
+
+  const lineChartOptions = {
+    responsive: true,
+    scales: {
+      x1: {
+        position: "top",
+        ticks: {
+          autoSkip: false,
+          maxRotation: 90,
+          minRotation: 90,
+          callback: function (value, index, values) {
+            const emotions = this.getLabelForValue(value).split(";")[1];
+            const text = this.getLabelForValue(value).split(";")[2]?.substring(0, 25);
+            const label = emotions?.concat(' - ', text, '...');
+            return label;
+          }
+        }
+      },
+      x2: {
+        position: "bottom",
+        ticks: {
+          callback: function (value, index, values) {
+            return this.getLabelForValue(value).split(";")[0];
+          }
+        }
+      },
+      y: {
+        ticks: {
+          callback: function (value, index, ticks) {
+            return value + " dbfs";
+          }
+        }
+      }
+    },
+    plugins: {
+      legend: {
+        position: "top"
+      },
+      title: {
+        display: true,
+        text: "Speaker Diarisation"
+      },
+      // annotation: {
+      //   drawTime: 'afterDatasetsDraw',
+      //   annotations: lineSegments
+      // }
+    }
+  };
+
   const getSpeakers = () => {
     const uniqueSpeakers = [...new Set(audioData.map((item) => item.speaker))];
     setSpeakers(uniqueSpeakers);
@@ -98,9 +111,25 @@ export default function App() {
     audioData.forEach((element) => {
       element.dbfs.forEach((v, i) => {
         if (element.dbfs.length - 1 === i) {
-          l.push(`${v.time / 1000};${element.emotion}`);
+         
+          l.push(`${element.end};${element.emotion};${element.text}`);
+          
+          //console.log(v.time);
+
+          // lineSegments.push({
+          //   drawTime: "afterDraw",
+          //   id: 'vline' + i,
+          //   type: "line",
+          //   scaleID: "x2",
+          //   mode:'vertical',
+          //   value: v.time/1000,
+          //   borderColor: "green",
+          //   borderWidth: 1
+          // })
+         
         } else {
-          l.push(`${v.time / 1000}`);
+          l.push(`${v.time/1000}`);
+         
         }
       });
     });
@@ -210,7 +239,7 @@ export default function App() {
         <Line
           options={lineChartOptions}
           data={lineData}
-          height={"150px"}
+          height={"200px"}
           width={"500px"}
         />
       </div>
@@ -231,3 +260,11 @@ export default function App() {
     </>
   );
 }
+
+const annotation1 = {
+  type: 'line',
+  borderColor: 'black',
+  borderWidth: 3,
+  scaleID: 'x-axis-0',
+  value: 1.35
+};
