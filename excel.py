@@ -34,39 +34,81 @@ def create_excel(path, name):
 
 
     # Create speaker talktime distribution worksheet
-   
+    #print(speakers)
 
-    unique_speakers = unique(speakers)
-   
-    st=[]
-    for speaker in unique_speakers:
+    s = ''
+    sdecibel = []
+    stime=[]
+    avg = []
+    for data in json_data:
+        # Assign speaker value if empty
+        if s == '':
+            s = data['speaker']
+
+        # If the speaker changes, add the total time and decibel to the collection.
+        # Reset the value collection so that it starts calculating for the next speaker in the list.
+        if s != data['speaker']:
+            avg.append((s, sum(sdecibel)/len(sdecibel), stime[len(stime)-1]-stime[0]))
+            sdecibel = []
+            stime=[]
         
-        speakingTime = 0
+        for dbfs in data['dbfs']:
+            sdecibel.append(dbfs['value'])
+            stime.append(dbfs['time'])
 
-        for data in json_data:
-            if data['speaker'] == speaker:
-                speakingTime = speakingTime + (data['end'] - data['start'])
-                
-        st.append(speakingTime)
-        totalTime = sum(st)
+        s = data['speaker']
 
-        speakingPercentage=[]
-        for t in st:
-            speakingPercentage.append(round(t/totalTime*100))
-
-    print(st)
-    header_label1=('speaker', 'time (%)')
+    # Add avg of the time.
+    avg.append((s, sum(sdecibel)/len(sdecibel), stime[len(stime)-1]-stime[0]))
+    #print(avg)
 
     wb.create_sheet('Speaker Talktime Distribution') # Create a new sheet
     wb.active = wb['Speaker Talktime Distribution'] # Set it as active
     sheet1 = wb.active
+    sheet1.cell(row=1, column=1).value = 'Speaker'
+    sheet1.cell(row=1, column=2).value = 'Average time (sec)'
+    sheet1.cell(row=1, column=3).value = 'Average dbfs'
 
-    for index, val in enumerate(header_label1):
-        sheet1.cell(row=1, column=index+1).value = val
+    row_num2 = 2
+    for val in avg:
+        sheet1.cell(row=row_num2, column=1).value = val[0]
+        sheet1.cell(row=row_num2, column=2).value = val[2]/1000
+        sheet1.cell(row=row_num2, column=3).value = val[1]
+        row_num2 = row_num2 +1
+        
+    # unique_speakers = unique(speakers)
+   
+    # st=[]
+    # for speaker in unique_speakers:
+        
+    #     speakingTime = 0
 
-    for row, speakerTime in enumerate(speakingPercentage):
-        sheet1.cell(row+2, column=1).value = unique_speakers[row]
-        sheet1.cell(row+2, column=2).value = speakerTime
+    #     for data in json_data:
+    #         if data['speaker'] == speaker:
+    #             speakingTime = speakingTime + (data['end'] - data['start'])
+                
+    #     st.append(speakingTime)
+    #     totalTime = sum(st)
+
+    #     speakingPercentage=[]
+    #     for t in st:
+    #         speakingPercentage.append(round(t/totalTime*100))
+
+    # print(st)
+    # header_label1=('speaker', 'time (%)')
+
+    # wb.create_sheet('Speaker Talktime Distribution') # Create a new sheet
+    # wb.active = wb['Speaker Talktime Distribution'] # Set it as active
+    # sheet1 = wb.active
+
+    # for index, val in enumerate(header_label1):
+    #     sheet1.cell(row=1, column=index+1).value = val
+
+    # for row, speakerTime in enumerate(speakingPercentage):
+    #     sheet1.cell(row+2, column=1).value = unique_speakers[row]
+    #     sheet1.cell(row+2, column=2).value = speakerTime
+
+
 
 
 
@@ -89,6 +131,7 @@ def create_excel(path, name):
             avgDecibel.append(dbfs['value'])
 
         avg = sum(avgDecibel) / len(avgDecibel)
+        
         sheet2.cell(row=row_num1, column=2).value = avg
         #print(avg)
 
