@@ -68,6 +68,33 @@ def create_excel(path, name):
         sheet1.cell(row+2, column=1).value = unique_speakers[row]
         sheet1.cell(row+2, column=2).value = speakerTime
 
+
+
+    # Create sheet for average decibel levels per sentence.
+    wb.create_sheet('Average Decibel Level') # Create a new sheet
+    wb.active = wb['Average Decibel Level'] # Set it as active
+    sheet2 = wb.active
+
+    row_num1 = 2
+
+    sheet2.cell(row=1, column=1).value = 'Sentence'
+    sheet2.cell(row=1, column=2).value = 'Average dbfs'
+
+    for data in json_data:
+        avgDecibel = []
+        #print(data['text'])
+        sheet2.cell(row=row_num1, column=1).value = data['text']
+
+        for dbfs in data['dbfs']:
+            avgDecibel.append(dbfs['value'])
+
+        avg = sum(avgDecibel) / len(avgDecibel)
+        sheet2.cell(row=row_num1, column=2).value = avg
+        #print(avg)
+
+        row_num1 = row_num1 + 1
+
+
     # Set the first sheets as active.
     wb.active = wb['Speaker Diarisation']
 

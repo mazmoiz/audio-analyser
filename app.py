@@ -13,7 +13,7 @@ def main():
     
     # Create header with authorization along with content-type
     header = {
-        'authorization': '29d17394c6d14d7187a71492a2c3a625',
+        'authorization': '<YOUR API KEY>',
         'content-type': 'application/json',
         'Accept': 'application/json'
     }
